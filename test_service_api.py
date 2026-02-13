@@ -203,7 +203,7 @@ class TestServiceAPI:
             assert response.status_code in [200, 201], \
                 f"Для цены {price} ожидался код 200/201, получен {response.status_code}"
 
-            response_data = response.json()
+            response_data = response.json()["data"][0]
             expected_tax = calculate_tax(price)
             expected_gross = calculate_gross(price)
 
@@ -233,7 +233,7 @@ class TestServiceAPI:
         assert response.status_code in [200, 201], \
             f"Ожидался код 200/201, получен {response.status_code}"
 
-        response_data = response.json()
+        response_data = response.json()["data"][0]
         actual_length = len(response_data["name"])
 
         assert actual_length <= DB_LIMITS["name_max_length"], \
@@ -282,7 +282,7 @@ class TestServiceAPI:
         assert response.status_code in [200, 201], \
             f"Ожидался код 200/201, получен {response.status_code}"
 
-        response_data = response.json()
+        response_data = response.json()["data"][0]
         assert response_data["price"] == DB_LIMITS["price_min"]
         print(
             f"Услуга с минимальными значениями создана (price={DB_LIMITS['price_min']})")
@@ -302,7 +302,7 @@ class TestServiceAPI:
         assert create_response.status_code in [
             200, 201], "Не удалось создать услугу"
 
-        service_uuid = create_response.json()["uuid"]
+        service_uuid = create_response.json()["data"][0]["uuid"]
 
         response = requests.get(
             f"{API_URL}{service_uuid}",
@@ -334,7 +334,7 @@ class TestServiceAPI:
         assert create_response.status_code in [
             200, 201], "Не удалось создать услугу"
 
-        service_uuid = create_response.json()["uuid"]
+        service_uuid = create_response.json()["data"][0]["uuid"]
 
         # Обновляем
         new_price = 250
@@ -376,7 +376,7 @@ class TestServiceAPI:
         assert create_response.status_code in [
             200, 201], "Не удалось создать услугу"
 
-        service_uuid = create_response.json()["uuid"]
+        service_uuid = create_response.json()["data"][0]["uuid"]
 
         # Удаляем
         response = requests.delete(
@@ -427,7 +427,7 @@ class TestServiceAPI:
             assert response.status_code in [200, 201], \
                 f"Для цены {price} ожидался код 200/201, получен {response.status_code}"
 
-            response_data = response.json()
+            response_data = response.json()["data"][0]
             assert abs(response_data["tax"] - expected_tax) < 0.01, \
                 f"НДС для {price}: ожидалось {expected_tax}, получено {response_data['tax']}"
             assert abs(response_data["gross"] - expected_gross) < 0.01, \
