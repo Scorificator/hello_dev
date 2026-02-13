@@ -28,13 +28,23 @@ source ./.venv/bin/activate
 ```
 
 ### Установка зависимостей
+Установка зависимостей python
 ```shell
 pip install -r requirements.txt"
 ```
 
-## Запуск автотестов
+Установка вебдвижка для тестирования UI
 ```shell
-pytest test_ui -s -v --headed (для запуска в интерфейсе)
+playwright install chromium 
+```
+
+## Запуск автотестов
+### Тест интерфейса
+```shell
+pytest test_ui.py -s -v --headed
+```
+### Тест API
+```shell
 pytest test_service_api.py -s -v
 ```
 
